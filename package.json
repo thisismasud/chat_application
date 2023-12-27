@@ -1,0 +1,19 @@
+{
+  "name": "chat_application",
+  "version": "1.0.0",
+  "description": "Inspired By LWS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thisismasud/chat_application.git"
+  },
+  "author": "Masud Parvez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thisismasud/chat_application/issues"
+  },
+  "homepage": "https://github.com/thisismasud/chat_application#readme"
+}
