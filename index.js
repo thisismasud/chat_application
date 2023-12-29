@@ -1,10 +1,26 @@
+/**
+ * Title: Chat Application
+ * Description: This is the index page, it contains and controll all the imports, connection, middlewares.
+ * Author: Masud Parvez
+ */
+
+//expternal imports
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const path = require("path");
-require("dotenv").config();
+
+//internal imports
+const {
+  notFoundHandler,
+  errorHandler,
+} = require("./middlewares/common/errorhandler");
+const loginRouter = require("./router/loginRouter");
+const inboxRouter = require("./router/inboxRouter");
+const usersRouter = require("./router/usersRouter");
 
 const app = express();
+require("dotenv").config();
 
 //datbase connection
 mongoose
@@ -22,10 +38,21 @@ app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
 //sets static folder
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public"))); //it sets up middleware to serve static files from the "public" directory
 
 //parse cookies
 app.use(cookieParser(process.env.COOKIE_SECRET));
+
+//routing setup
+app.use("/", loginRouter);
+app.use("/users", usersRouter);
+app.use("/inbox", inboxRouter);
+
+//404 not found handler
+app.use(notFoundHandler);
+
+//common error handler
+app.use(errorHandler);
 
 //start server
 app.listen(process.env.PORT, () =>
