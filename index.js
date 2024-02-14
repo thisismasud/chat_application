@@ -9,6 +9,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const path = require("path");
+const moment = require("moment");
+const http = require("http");
+const cors = require('cors')
 
 //internal imports
 const {
@@ -19,8 +22,20 @@ const loginRouter = require("./router/loginRouter");
 const inboxRouter = require("./router/inboxRouter");
 const usersRouter = require("./router/usersRouter");
 
+
 const app = express();
+
 require("dotenv").config();
+app.use(cors())
+
+const httpServer = http.createServer(app);
+const {Server} = require("socket.io")
+//configures socket.io
+const io = new Server(httpServer);
+global.io = io;
+
+//sets moment as app locals
+app.locals.moment = moment;
 
 //datbase connection
 mongoose
@@ -31,8 +46,8 @@ mongoose
   );
 
 //request parses
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); //enables my Express.js server to automatically parse incoming JSON data, making it easier to work with JSON payloads in my application routes.
+app.use(express.urlencoded({ extended: true })); //By using this middleware, I can access the form data submitted in a POST request through req.body in my route handlers.
 
 //sets view engine
 app.set("view engine", "ejs");
@@ -55,6 +70,6 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 //start server
-app.listen(process.env.PORT, () =>
+httpServer.listen(process.env.PORT, () =>
   console.log("> Server is up and running on port : " + process.env.PORT)
 );

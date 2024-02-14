@@ -12,7 +12,7 @@ function notFoundHandler(req, res, next) {
   next(createError(404, "Your requested page was no found."));
 }
 
-//commong error handler
+//common error handler
 function errorHandler(err, req, res, next) {
   res.locals.error = process.env.NODE_ENV === "production" ? err : err.message;
   res.status(err.status || 500);
